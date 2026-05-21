@@ -11,75 +11,72 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     background: #0f0f13;
     color: #fff;
-    min-height: 100vh;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* 상단 헤더 */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 28px;
+    border-bottom: 1px solid #1e1e26;
+    flex-shrink: 0;
+  }
+
+  .header h1 { font-size: 16px; font-weight: 600; letter-spacing: 3px; color: #555; text-transform: uppercase; }
+
+  .always-on-wrap { display: flex; align-items: center; gap: 10px; }
+  .toggle-switch { position: relative; width: 46px; height: 24px; cursor: pointer; }
+  .toggle-switch input { opacity: 0; width: 0; height: 0; }
+  .slider { position: absolute; inset: 0; background: #2a2a36; border-radius: 24px; transition: 0.3s; }
+  .slider:before { content: ""; position: absolute; width: 17px; height: 17px; left: 3px; bottom: 3px; background: #555; border-radius: 50%; transition: 0.3s; }
+  input:checked + .slider { background: #4f6ef7; }
+  input:checked + .slider:before { transform: translateX(22px); background: #fff; }
+  .toggle-label { font-size: 13px; color: #aaa; }
+  .toggle-label span { color: #4f6ef7; font-weight: 600; }
+
+  /* 메인 2단 레이아웃 */
+  .main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* 왼쪽 컨트롤 패널 */
+  .left-panel {
+    width: 320px;
+    flex-shrink: 0;
+    border-right: 1px solid #1e1e26;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 28px;
-    padding: 32px 24px;
+    gap: 24px;
+    padding: 28px 24px;
   }
-
-  h1 { font-size: 18px; font-weight: 600; letter-spacing: 3px; color: #555; text-transform: uppercase; }
-
-  .always-on-wrap {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .toggle-switch {
-    position: relative;
-    width: 52px;
-    height: 28px;
-    cursor: pointer;
-  }
-  .toggle-switch input { opacity: 0; width: 0; height: 0; }
-  .slider {
-    position: absolute;
-    inset: 0;
-    background: #2a2a36;
-    border-radius: 28px;
-    transition: 0.3s;
-  }
-  .slider:before {
-    content: "";
-    position: absolute;
-    width: 20px; height: 20px;
-    left: 4px; bottom: 4px;
-    background: #555;
-    border-radius: 50%;
-    transition: 0.3s;
-  }
-  input:checked + .slider { background: #4f6ef7; }
-  input:checked + .slider:before { transform: translateX(24px); background: #fff; }
-
-  .toggle-label { font-size: 14px; color: #aaa; }
-  .toggle-label span { color: #4f6ef7; font-weight: 600; }
 
   .lang-indicator {
-    font-size: 13px;
+    font-size: 12px;
     color: #444;
-    background: #1e1e26;
+    background: #1a1a22;
     border-radius: 50px;
-    padding: 6px 18px;
-    min-width: 200px;
+    padding: 6px 16px;
     text-align: center;
     transition: all 0.3s;
     border: 1px solid transparent;
+    width: 100%;
   }
   .lang-indicator.ko { color: #f7c948; border-color: #3a3220; }
   .lang-indicator.en { color: #4fc3f7; border-color: #1a2f3a; }
 
-  .mic-wrap {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 14px;
-  }
+  .mic-wrap { display: flex; flex-direction: column; align-items: center; gap: 12px; }
 
   .mic-btn {
-    width: 110px; height: 110px;
+    width: 100px; height: 100px;
     border-radius: 50%;
     border: 3px solid #2a2a36;
     background: #1e1e26;
@@ -87,152 +84,258 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 36px;
     transition: all 0.15s;
-    font-size: 40px;
   }
   .mic-btn:hover { border-color: #4f6ef7; transform: scale(1.04); }
-  .mic-btn.listening {
-    border-color: #4f6ef7;
-    background: #1a1a2e;
-    animation: glow 1.5s infinite;
-  }
-  .mic-btn.speaking {
-    border-color: #2ecc71;
-    background: #0d2018;
-    animation: glow-green 1s infinite;
-  }
+  .mic-btn.listening { border-color: #4f6ef7; background: #1a1a2e; animation: glow 1.5s infinite; }
+  .mic-btn.speaking { border-color: #2ecc71; background: #0d2018; animation: glow-green 1s infinite; }
 
   @keyframes glow {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(79,110,247,0.3); }
-    50% { box-shadow: 0 0 0 16px rgba(79,110,247,0); }
+    0%,100% { box-shadow: 0 0 0 0 rgba(79,110,247,0.3); }
+    50% { box-shadow: 0 0 0 14px rgba(79,110,247,0); }
   }
   @keyframes glow-green {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(46,204,113,0.3); }
-    50% { box-shadow: 0 0 0 16px rgba(46,204,113,0); }
+    0%,100% { box-shadow: 0 0 0 0 rgba(46,204,113,0.3); }
+    50% { box-shadow: 0 0 0 14px rgba(46,204,113,0); }
   }
 
-  .mic-label { font-size: 13px; color: #555; text-align: center; }
+  .mic-label { font-size: 12px; color: #555; text-align: center; }
 
-  .results { width: 100%; max-width: 560px; display: flex; flex-direction: column; gap: 10px; }
-
-  .result-box {
-    background: #1e1e26;
-    border-radius: 16px;
-    padding: 18px 20px;
-    min-height: 68px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    border: 1px solid transparent;
-    transition: border-color 0.3s;
-  }
-  .result-box.active { border-color: #2a2a46; }
-
-  .result-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: #444; font-weight: 600; }
-  .result-text { font-size: 16px; line-height: 1.6; color: #ccc; min-height: 24px; }
-  .result-box.translated .result-label { color: #4f6ef7; }
-  .result-box.translated .result-text { color: #fff; font-size: 18px; }
-
-  .voice-section {
+  /* 현재 번역 박스 */
+  .current-box {
     width: 100%;
-    max-width: 560px;
-    background: #1e1e26;
-    border-radius: 16px;
-    padding: 18px 20px;
+    background: #1a1a22;
+    border-radius: 14px;
+    padding: 14px 16px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
+    border: 1px solid #2a2a36;
+    min-height: 80px;
   }
+  .current-orig { font-size: 12px; color: #555; line-height: 1.5; }
+  .current-divider { height: 1px; background: #2a2a36; }
+  .current-trans { font-size: 15px; color: #fff; line-height: 1.5; font-weight: 500; }
 
-  .voice-section-title { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: #444; font-weight: 600; }
-
-  .voice-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .voice-row label { font-size: 12px; color: #666; min-width: 60px; }
+  /* 목소리 설정 */
+  .voice-section { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+  .voice-title { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: #444; font-weight: 600; }
+  .voice-row { display: flex; align-items: center; gap: 10px; }
+  .voice-row label { font-size: 11px; color: #555; min-width: 50px; }
 
   select {
-    background: #0f0f13;
+    background: #1a1a22;
     color: #ccc;
     border: 1px solid #2a2a36;
-    border-radius: 8px;
-    padding: 6px 10px;
-    font-size: 13px;
+    border-radius: 7px;
+    padding: 5px 8px;
+    font-size: 12px;
     flex: 1;
     min-width: 0;
     cursor: pointer;
   }
 
-  .slider-row { display: flex; align-items: center; gap: 10px; flex: 1; }
+  .slider-row { display: flex; align-items: center; gap: 8px; flex: 1; }
   input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
-  .slider-val { font-size: 12px; color: #666; min-width: 30px; text-align: right; }
+  .slider-val { font-size: 11px; color: #555; min-width: 28px; text-align: right; }
 
-  .play-btn {
+  .test-btn {
     background: none;
     border: 1px solid #2a2a36;
-    color: #666;
-    border-radius: 8px;
+    color: #555;
+    border-radius: 7px;
     padding: 5px 12px;
-    font-size: 12px;
+    font-size: 11px;
     cursor: pointer;
     transition: all 0.2s;
-    white-space: nowrap;
+    width: 100%;
   }
-  .play-btn:hover { border-color: #4f6ef7; color: #4f6ef7; }
+  .test-btn:hover { border-color: #4f6ef7; color: #4f6ef7; }
+
+  /* 오른쪽 대화 패널 */
+  .right-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .history-header {
+    padding: 14px 24px;
+    border-bottom: 1px solid #1e1e26;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  .history-title { font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: #444; font-weight: 600; }
+
+  .clear-btn {
+    background: none;
+    border: 1px solid #2a2a36;
+    color: #444;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .clear-btn:hover { border-color: #e74c3c; color: #e74c3c; }
+
+  .history-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .history-list::-webkit-scrollbar { width: 4px; }
+  .history-list::-webkit-scrollbar-track { background: transparent; }
+  .history-list::-webkit-scrollbar-thumb { background: #2a2a36; border-radius: 4px; }
+
+  /* 대화 말풍선 */
+  .bubble-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    animation: fadeIn 0.3s ease;
+  }
+  .bubble-wrap.ko-side { align-items: flex-end; }
+  .bubble-wrap.en-side { align-items: flex-start; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .bubble-meta { font-size: 10px; color: #444; padding: 0 6px; display: flex; gap: 8px; align-items: center; }
+
+  .bubble {
+    max-width: 75%;
+    border-radius: 16px;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    position: relative;
+  }
+
+  .bubble-wrap.ko-side .bubble {
+    background: #1e2a4a;
+    border-bottom-right-radius: 4px;
+  }
+  .bubble-wrap.en-side .bubble {
+    background: #1e1e26;
+    border-bottom-left-radius: 4px;
+  }
+
+  .bubble-orig { font-size: 12px; color: #666; line-height: 1.5; }
+  .bubble-arrow { font-size: 10px; color: #444; }
+  .bubble-trans { font-size: 14px; color: #eee; line-height: 1.6; font-weight: 500; }
+
+  .replay-btn {
+    background: none;
+    border: none;
+    color: #444;
+    font-size: 11px;
+    cursor: pointer;
+    padding: 0;
+    text-align: inherit;
+    transition: color 0.2s;
+  }
+  .replay-btn:hover { color: #4f6ef7; }
+
+  .empty-state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #2a2a36;
+  }
+  .empty-state .icon { font-size: 48px; }
+  .empty-state p { font-size: 13px; }
 </style>
 </head>
 <body>
 
-<h1>통역기</h1>
-
-<div class="always-on-wrap">
-  <label class="toggle-switch">
-    <input type="checkbox" id="alwaysOn" onchange="toggleAlwaysOn()">
-    <span class="slider"></span>
-  </label>
-  <span class="toggle-label">항상 듣기 <span id="alwaysLabel">OFF</span></span>
-</div>
-
-<div class="lang-indicator" id="langIndicator">🌐 말하면 언어를 자동 감지해요</div>
-
-<div class="mic-wrap">
-  <button class="mic-btn" id="micBtn" onclick="toggleManual()">🎙️</button>
-  <span class="mic-label" id="micLabel">눌러서 말하기</span>
-</div>
-
-<div class="results">
-  <div class="result-box" id="origBox">
-    <div class="result-label" id="origLabel">원문</div>
-    <div class="result-text" id="origText">—</div>
-  </div>
-  <div class="result-box translated" id="transBox">
-    <div class="result-label">번역</div>
-    <div class="result-text" id="transText">—</div>
-    <button class="play-btn" id="playBtn" onclick="replayLast()" style="display:none">▶ 다시 듣기</button>
+<!-- 헤더 -->
+<div class="header">
+  <h1>통역기</h1>
+  <div class="always-on-wrap">
+    <label class="toggle-switch">
+      <input type="checkbox" id="alwaysOn" onchange="toggleAlwaysOn()">
+      <span class="slider"></span>
+    </label>
+    <span class="toggle-label">항상 듣기 <span id="alwaysLabel">OFF</span></span>
   </div>
 </div>
 
-<div class="voice-section">
-  <div class="voice-section-title">🔊 목소리 설정</div>
-  <div class="voice-row">
-    <label>목소리</label>
-    <select id="voiceSelect"></select>
+<!-- 메인 2단 -->
+<div class="main">
+
+  <!-- 왼쪽 컨트롤 -->
+  <div class="left-panel">
+
+    <div class="lang-indicator" id="langIndicator">🌐 말하면 언어 자동 감지</div>
+
+    <div class="mic-wrap">
+      <button class="mic-btn" id="micBtn" onclick="toggleManual()">🎙️</button>
+      <span class="mic-label" id="micLabel">눌러서 말하기</span>
+    </div>
+
+    <!-- 현재 번역 -->
+    <div class="current-box">
+      <div class="current-orig" id="currentOrig">—</div>
+      <div class="current-divider"></div>
+      <div class="current-trans" id="currentTrans">—</div>
+    </div>
+
+    <!-- 목소리 설정 -->
+    <div class="voice-section">
+      <div class="voice-title">🔊 목소리 설정</div>
+      <div class="voice-row">
+        <label>목소리</label>
+        <select id="voiceSelect"></select>
+      </div>
+      <div class="voice-row">
+        <label>속도</label>
+        <div class="slider-row">
+          <input type="range" id="rateSlider" min="0.5" max="1.5" step="0.05" value="0.95" oninput="updateSlider('rate')">
+          <span class="slider-val" id="rateVal">0.95</span>
+        </div>
+      </div>
+      <div class="voice-row">
+        <label>음높이</label>
+        <div class="slider-row">
+          <input type="range" id="pitchSlider" min="0.5" max="2" step="0.05" value="1" oninput="updateSlider('pitch')">
+          <span class="slider-val" id="pitchVal">1.00</span>
+        </div>
+      </div>
+      <button class="test-btn" onclick="testVoice()">🔊 목소리 테스트</button>
+    </div>
+
   </div>
-  <div class="voice-row">
-    <label>속도</label>
-    <div class="slider-row">
-      <input type="range" id="rateSlider" min="0.5" max="1.5" step="0.05" value="0.95" oninput="updateSlider('rate')">
-      <span class="slider-val" id="rateVal">0.95</span>
+
+  <!-- 오른쪽 대화 히스토리 -->
+  <div class="right-panel">
+    <div class="history-header">
+      <span class="history-title">💬 대화 기록</span>
+      <button class="clear-btn" onclick="clearHistory()">지우기</button>
+    </div>
+    <div class="history-list" id="historyList">
+      <div class="empty-state" id="emptyState">
+        <span class="icon">💬</span>
+        <p>대화가 여기에 기록돼요</p>
+      </div>
     </div>
   </div>
-  <div class="voice-row">
-    <label>음높이</label>
-    <div class="slider-row">
-      <input type="range" id="pitchSlider" min="0.5" max="2" step="0.05" value="1" oninput="updateSlider('pitch')">
-      <span class="slider-val" id="pitchVal">1.00</span>
-    </div>
-  </div>
-  <div class="voice-row">
-    <button class="play-btn" onclick="testVoice()">🔊 목소리 테스트</button>
-  </div>
+
 </div>
 
 <script>
@@ -243,7 +346,9 @@
   let lastLang = 'en';
   let voices = [];
   let shouldRestart = false;
+  let historyCount = 0;
 
+  // 목소리 로드
   function loadVoices() {
     voices = speechSynthesis.getVoices();
     const sel = document.getElementById('voiceSelect');
@@ -257,7 +362,6 @@
     const koIdx = voices.findIndex(v => v.lang.startsWith('ko'));
     if (koIdx >= 0) sel.value = koIdx;
   }
-
   speechSynthesis.onvoiceschanged = loadVoices;
   loadVoices();
 
@@ -271,28 +375,20 @@
     speak(text, lastLang === 'ko' ? 'ko-KR' : 'en-US');
   }
 
+  // 항상 듣기
   function toggleAlwaysOn() {
     alwaysOn = document.getElementById('alwaysOn').checked;
     document.getElementById('alwaysLabel').textContent = alwaysOn ? 'ON' : 'OFF';
-    if (alwaysOn) {
-      shouldRestart = true;
-      startListening();
-    } else {
-      shouldRestart = false;
-      stopListening();
-    }
+    if (alwaysOn) { shouldRestart = true; startListening(); }
+    else { shouldRestart = false; stopListening(); }
   }
 
   function toggleManual() {
     if (alwaysOn) return;
-    if (isListening) {
-      shouldRestart = false;
-      stopListening();
-    } else {
-      startListening();
-    }
+    isListening ? (shouldRestart = false, stopListening()) : startListening();
   }
 
+  // 음성 인식
   function startListening() {
     if (isListening) return;
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
@@ -323,29 +419,23 @@
       const fromLang = isKorean ? 'ko' : 'en';
       const toLang = isKorean ? 'en' : 'ko';
 
-      document.getElementById('origLabel').textContent = isKorean ? '🇰🇷 한국어 (원문)' : '🇺🇸 English (Original)';
-      document.getElementById('origText').textContent = transcript;
-      document.getElementById('origBox').classList.add('active');
       setLangIndicator(isKorean ? '🇰🇷 한국어 감지 → 영어 번역 중' : '🇺🇸 영어 감지 → 한국어 번역 중', isKorean ? 'ko' : 'en');
+      document.getElementById('currentOrig').textContent = transcript;
+      document.getElementById('currentTrans').textContent = '번역 중...';
 
-      await translate(transcript, fromLang, toLang);
+      await translate(transcript, fromLang, toLang, isKorean);
     };
 
     recognition.onerror = (e) => {
-      if (e.error !== 'no-speech') {
-        setLangIndicator('오류: ' + e.error, '');
-      }
+      if (e.error !== 'no-speech') setLangIndicator('오류: ' + e.error, '');
     };
 
     recognition.onend = () => {
       isListening = false;
       document.getElementById('micBtn').classList.remove('listening');
       document.getElementById('micBtn').textContent = '🎙️';
-      if (shouldRestart && alwaysOn) {
-        setTimeout(() => startListening(), 400);
-      } else {
-        document.getElementById('micLabel').textContent = '눌러서 말하기';
-      }
+      if (shouldRestart && alwaysOn) setTimeout(() => startListening(), 400);
+      else document.getElementById('micLabel').textContent = '눌러서 말하기';
     };
 
     recognition.start();
@@ -358,10 +448,11 @@
     document.getElementById('micBtn').classList.remove('listening');
     document.getElementById('micBtn').textContent = '🎙️';
     document.getElementById('micLabel').textContent = '눌러서 말하기';
-    setLangIndicator('🌐 말하면 언어를 자동 감지해요', '');
+    setLangIndicator('🌐 말하면 언어 자동 감지', '');
   }
 
-  async function translate(text, from, to) {
+  // 번역
+  async function translate(text, from, to, isKorean) {
     try {
       const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${encodeURIComponent(text)}`;
       const res = await fetch(url);
@@ -371,34 +462,82 @@
       lastTranslated = translated;
       lastLang = to;
 
-      document.getElementById('transText').textContent = translated;
-      document.getElementById('transBox').classList.add('active');
-      document.getElementById('playBtn').style.display = 'inline-block';
+      // 현재 박스 업데이트
+      document.getElementById('currentTrans').textContent = translated;
       setLangIndicator(to === 'en' ? '✅ 영어 번역 완료' : '✅ 한국어 번역 완료', to === 'ko' ? 'ko' : 'en');
+
+      // 히스토리에 추가
+      addToHistory(text, translated, isKorean, to);
 
       speak(translated, to === 'en' ? 'en-US' : 'ko-KR');
     } catch (err) {
       setLangIndicator('❌ 번역 실패 - 인터넷 확인', '');
+      document.getElementById('currentTrans').textContent = '번역 실패';
     }
   }
 
+  // 대화 히스토리 추가
+  function addToHistory(orig, translated, isKorean, toLang) {
+    const list = document.getElementById('historyList');
+    const empty = document.getElementById('emptyState');
+    if (empty) empty.remove();
+
+    const now = new Date();
+    const time = now.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+    const flag = isKorean ? '🇰🇷' : '🇺🇸';
+    const side = isKorean ? 'ko-side' : 'en-side';
+    const transFlag = isKorean ? '🇺🇸' : '🇰🇷';
+
+    const id = 'bubble-' + (++historyCount);
+
+    const wrap = document.createElement('div');
+    wrap.className = `bubble-wrap ${side}`;
+    wrap.innerHTML = `
+      <div class="bubble-meta">
+        <span>${flag} ${time}</span>
+      </div>
+      <div class="bubble">
+        <div class="bubble-orig">${escHtml(orig)}</div>
+        <div class="bubble-arrow">${transFlag} ↓</div>
+        <div class="bubble-trans">${escHtml(translated)}</div>
+        <button class="replay-btn" onclick="replayBubble('${id}')">▶ 다시 듣기</button>
+      </div>
+    `;
+    wrap.id = id;
+    wrap.dataset.text = translated;
+    wrap.dataset.lang = toLang;
+
+    list.appendChild(wrap);
+    list.scrollTop = list.scrollHeight;
+  }
+
+  function replayBubble(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const lang = el.dataset.lang === 'ko' ? 'ko-KR' : 'en-US';
+    speak(el.dataset.text, lang);
+  }
+
+  function clearHistory() {
+    const list = document.getElementById('historyList');
+    list.innerHTML = '<div class="empty-state" id="emptyState"><span class="icon">💬</span><p>대화가 여기에 기록돼요</p></div>';
+    historyCount = 0;
+  }
+
+  // TTS
   function speak(text, lang) {
     speechSynthesis.cancel();
     const utter = new SpeechSynthesisUtterance(text);
-
     const selIdx = document.getElementById('voiceSelect').value;
     const selVoice = voices[selIdx];
-    if (selVoice) {
-      utter.voice = selVoice;
-    } else {
+    if (selVoice) utter.voice = selVoice;
+    else {
       const match = voices.find(v => v.lang.startsWith(lang.split('-')[0]));
       if (match) utter.voice = match;
     }
-
     utter.lang = lang;
     utter.rate = parseFloat(document.getElementById('rateSlider').value);
     utter.pitch = parseFloat(document.getElementById('pitchSlider').value);
-
     utter.onstart = () => {
       document.getElementById('micBtn').classList.remove('listening');
       document.getElementById('micBtn').classList.add('speaking');
@@ -408,19 +547,17 @@
       document.getElementById('micBtn').classList.remove('speaking');
       document.getElementById('micBtn').textContent = '🎙️';
     };
-
     speechSynthesis.speak(utter);
-  }
-
-  function replayLast() {
-    if (!lastTranslated) return;
-    speak(lastTranslated, lastLang === 'ko' ? 'ko-KR' : 'en-US');
   }
 
   function setLangIndicator(msg, lang) {
     const el = document.getElementById('langIndicator');
     el.textContent = msg;
     el.className = 'lang-indicator' + (lang ? ' ' + lang : '');
+  }
+
+  function escHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 </script>
 </body>
