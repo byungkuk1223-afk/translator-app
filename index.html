@@ -623,6 +623,17 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
   }
 
   function toggleManual() {
+    // 드래그로 선택된 텍스트가 있으면 → TTS
+    const sel  = window.getSelection()?.toString().trim();
+    if (sel) {
+      const isKo = /[\uAC00-\uD7AF]/.test(sel);
+      const isJa = /[\u3040-\u30FF]/.test(sel);
+      const lang = isKo ? 'ko-KR' : isJa ? 'ja-JP' : 'en-US';
+      speak(sel, lang);
+      window.getSelection()?.removeAllRanges();
+      return;
+    }
+    // 선택 없으면 기존 녹음 토글
     if (!isRecording || alwaysOn) return;
     isListening ? (() => { shouldRestart = false; stopListening(); })() : startListening();
   }
@@ -855,11 +866,15 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
 
     try {
       const translated = await fetchTrans(input, from, to);
-      // 로딩 → 결과 교체
+      // 말하기 패널 결과 교체
       const transEl = document.getElementById(id + '-trans');
       const actEl   = document.getElementById(id + '-actions');
       if (transEl) transEl.textContent = translated;
       if (actEl)   actEl.innerHTML = speakItemActions(id, translated, toLang);
+
+      // 대화 기록에도 추가 (P1 = 나)
+      const p1n = document.getElementById('p1Name').value || '사람 1';
+      addBubble(input, translated, 1, p1n + ' ✏️', 'p1', from, to);
     } catch {
       const transEl = document.getElementById(id + '-trans');
       if (transEl) { transEl.textContent = '번역 실패'; transEl.style.color = '#e74c3c'; }
