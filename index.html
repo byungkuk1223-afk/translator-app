@@ -532,7 +532,6 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
   let voices        = [];
   let bubbleCount   = 0;
   let sessionCount  = 0;
-  let recogLang     = 'ko-KR';
   let lastDetected  = null;
 
   /* ── 목소리 로드 ── */
@@ -673,7 +672,7 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
     }
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     recognition = new SR();
-    recognition.lang = recogLang;
+    recognition.lang = 'ko-KR';
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
     recognition.continuous = false;
@@ -693,7 +692,6 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
 
       const { person, lang } = detectSpeaker(transcript);
       lastDetected = lang;
-      recogLang = (lang === 'ko') ? 'en-US' : 'ko-KR';
 
       const p1n = document.getElementById('p1Name').value || '사람 1';
       const p2n = document.getElementById('p2Name').value || '사람 2';
