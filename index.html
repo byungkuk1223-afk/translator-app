@@ -721,6 +721,8 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
     // 새 라이브 버블 생성
     liveSpeaker = speaker;
     const list = document.getElementById('historyList');
+    const empty = document.getElementById('emptyState');
+    if (empty) empty.remove();
     const t    = new Date().toLocaleTimeString('ko-KR', { hour:'2-digit', minute:'2-digit' });
     const id   = 'b' + (++bubbleCount);
     liveBubbleId = id;
@@ -795,6 +797,8 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
   ══════════════════════════════════════ */
   function addBubble(orig, speaker) {
     const list = document.getElementById('historyList');
+    const empty = document.getElementById('emptyState');
+    if (empty) empty.remove();
     const t    = new Date().toLocaleTimeString('ko-KR', { hour:'2-digit', minute:'2-digit' });
     const id   = 'b' + (++bubbleCount);
 
