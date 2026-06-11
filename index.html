@@ -7,7 +7,6 @@
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: #0f0f13;
@@ -20,30 +19,22 @@ body {
 
 /* ── Header ── */
 .header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 13px 24px;
-  border-bottom: 1px solid #1e1e26;
-  flex-shrink: 0;
-  gap: 12px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 13px 24px; border-bottom: 1px solid #1e1e26; flex-shrink: 0; gap: 12px;
 }
 .header h1 { font-size: 15px; font-weight: 600; letter-spacing: 3px; color: #555; text-transform: uppercase; }
 .header-right { display: flex; align-items: center; gap: 8px; }
 
 .settings-btn {
   background: none; border: 1px solid #2a2a36; color: #666;
-  border-radius: 8px; padding: 7px 13px; font-size: 12px;
-  cursor: pointer; transition: all 0.2s; letter-spacing: 0.5px;
+  border-radius: 8px; padding: 7px 13px; font-size: 12px; cursor: pointer; transition: all 0.2s;
 }
 .settings-btn:hover, .settings-btn.open { border-color: #4f6ef7; color: #4f6ef7; background: #0d1020; }
 
 .record-btn {
-  display: flex; align-items: center; gap: 7px;
-  padding: 7px 18px; border-radius: 20px;
-  border: 1px solid #2a3a6a; background: #0d1020;
-  color: #4f6ef7; font-size: 13px; font-weight: 600;
-  cursor: pointer; transition: all 0.2s;
+  display: flex; align-items: center; gap: 7px; padding: 7px 18px;
+  border-radius: 20px; border: 1px solid #2a3a6a; background: #0d1020;
+  color: #4f6ef7; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s;
 }
 .record-btn:hover { background: #131828; }
 .record-btn.active { background: #1a0d0d; color: #e74c3c; border-color: #5a2020; }
@@ -51,49 +42,45 @@ body {
 .record-btn.active .record-dot { animation: blink 1s infinite; }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
 
-/* ── Settings Panel ── */
+/* ── Settings ── */
 .settings-panel {
   display: none; background: #0a0a0e;
-  border-bottom: 1px solid #1e1e26;
-  padding: 18px 28px 20px; flex-shrink: 0;
+  border-bottom: 1px solid #1e1e26; padding: 16px 28px; flex-shrink: 0;
 }
-.settings-panel.open { display: block; }
-.settings-row { display: flex; gap: 32px; flex-wrap: wrap; }
-.settings-group { display: flex; flex-direction: column; gap: 10px; min-width: 190px; }
-.settings-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: #444; font-weight: 600; margin-bottom: 2px; }
-.person-row { display: flex; align-items: center; gap: 8px; }
-.person-badge { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; flex-shrink: 0; }
-.p1-badge { background: #1a2240; color: #4f6ef7; border: 1px solid #2a3a6a; }
-.p2-badge { background: #0f2010; color: #2ecc71; border: 1px solid #1a4020; }
-
-input[type=text] {
-  background: #1a1a22; color: #ccc; border: 1px solid #2a2a36;
-  border-radius: 7px; padding: 5px 9px; font-size: 12px; width: 100px; outline: none;
-}
-input[type=text]:focus { border-color: #4f6ef7; }
-select {
-  background: #1a1a22; color: #ccc; border: 1px solid #2a2a36;
-  border-radius: 7px; padding: 5px 8px; font-size: 12px; cursor: pointer; outline: none;
-}
-
-.settings-divider { width: 1px; background: #1e1e26; align-self: stretch; }
-.trans-group { display: flex; flex-direction: column; gap: 8px; }
+.settings-panel.open { display: flex; gap: 32px; align-items: flex-start; flex-wrap: wrap; }
+.settings-group { display: flex; flex-direction: column; gap: 8px; }
+.settings-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: #444; font-weight: 600; }
 .checkbox-row {
   display: flex; align-items: center; gap: 8px;
   font-size: 12px; color: #888; cursor: pointer; user-select: none;
 }
-.checkbox-row input[type=checkbox] { accent-color: #4f6ef7; width: 14px; height: 14px; cursor: pointer; flex-shrink: 0; }
+.checkbox-row input { accent-color: #4f6ef7; width: 14px; height: 14px; cursor: pointer; }
 .checkbox-row:hover { color: #bbb; }
+select {
+  background: #1a1a22; color: #ccc; border: 1px solid #2a2a36;
+  border-radius: 7px; padding: 5px 8px; font-size: 12px; cursor: pointer; outline: none;
+}
+.settings-divider { width: 1px; background: #1e1e26; align-self: stretch; }
+
+/* Speaker legend */
+.speaker-legend {
+  display: flex; flex-direction: column; gap: 6px;
+}
+.speaker-chip {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; color: #aaa;
+}
+.speaker-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 
 /* ── Main 3-col ── */
 .main { display: flex; flex: 1; overflow: hidden; }
 
-/* ── Left Panel (마이크) ── */
+/* ── Left Panel ── */
 .left-panel {
-  width: 285px; flex-shrink: 0;
+  width: 260px; flex-shrink: 0;
   border-right: 1px solid #1e1e26;
   display: flex; flex-direction: column;
-  padding: 22px 18px; gap: 14px; overflow-y: auto;
+  padding: 20px 16px; gap: 14px; overflow-y: auto;
 }
 
 .lang-badge {
@@ -101,8 +88,7 @@ select {
   border: 1px solid transparent; border-radius: 50px;
   padding: 5px 14px; text-align: center; transition: all 0.3s;
 }
-.lang-badge.ko { color: #f7c948; border-color: #302a10; }
-.lang-badge.en { color: #4fc3f7; border-color: #102030; }
+.lang-badge.active { color: #4fc3f7; border-color: #102030; }
 
 .mic-area { display: flex; flex-direction: column; align-items: center; gap: 10px; }
 .mic-btn {
@@ -119,32 +105,18 @@ select {
 @keyframes glow-green { 0%,100%{box-shadow:0 0 0 0 rgba(46,204,113,0.3)} 50%{box-shadow:0 0 0 14px rgba(46,204,113,0)} }
 .mic-label { font-size: 11px; color: #555; text-align: center; }
 
-.speaker-indicator {
+.speaker-now {
   background: #13131a; border: 1px solid #1e1e26;
   border-radius: 10px; padding: 7px 12px;
   font-size: 12px; color: #444; text-align: center; transition: all 0.3s;
 }
-.speaker-indicator.p1 { color: #4f6ef7; border-color: #2a3a6a; background: #0c1020; }
-.speaker-indicator.p2 { color: #2ecc71; border-color: #1a3a20; background: #0a1410; }
 
 .current-box {
   background: #13131a; border: 1px solid #1e1e26;
   border-radius: 12px; padding: 11px 13px;
-  display: flex; flex-direction: column; gap: 7px; min-height: 70px;
+  display: flex; flex-direction: column; gap: 7px; min-height: 60px;
 }
 .current-orig { font-size: 12px; color: #555; line-height: 1.5; }
-.current-divider { height: 1px; background: #1e1e26; }
-.current-trans { font-size: 14px; color: #ddd; line-height: 1.5; font-weight: 500; }
-
-.always-row { display: flex; align-items: center; gap: 10px; }
-.tog-wrap { position: relative; width: 40px; height: 22px; cursor: pointer; flex-shrink: 0; }
-.tog-wrap input { opacity: 0; width: 0; height: 0; }
-.tog-track { position: absolute; inset: 0; background: #2a2a36; border-radius: 22px; transition: 0.3s; }
-.tog-track:before { content:""; position:absolute; width:15px; height:15px; left:3.5px; bottom:3.5px; background:#555; border-radius:50%; transition:0.3s; }
-.tog-wrap input:checked + .tog-track { background: #4f6ef7; }
-.tog-wrap input:checked + .tog-track:before { transform: translateX(18px); background: #fff; }
-.always-label { font-size: 12px; color: #666; }
-.always-label span { color: #4f6ef7; font-weight: 600; }
 
 .voice-section { display: flex; flex-direction: column; gap: 8px; }
 .voice-title { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: #444; font-weight: 600; }
@@ -160,35 +132,26 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
 }
 .test-btn:hover { border-color: #4f6ef7; color: #4f6ef7; }
 
-/* ── History Panel (가운데) ── */
-.history-panel {
-  flex: 1; min-width: 280px;
-  display: flex; flex-direction: column; overflow: hidden;
-  border-right: 1px solid #1e1e26;
-}
+/* ── History Panel ── */
+.history-panel { flex: 1; min-width: 280px; display: flex; flex-direction: column; overflow: hidden; border-right: 1px solid #1e1e26; }
 .panel-header {
-  padding: 11px 20px;
-  border-bottom: 1px solid #1e1e26;
-  display: flex; align-items: center; justify-content: space-between;
-  flex-shrink: 0;
+  padding: 11px 20px; border-bottom: 1px solid #1e1e26;
+  display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
 }
 .panel-title { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: #444; font-weight: 600; }
 .panel-actions { display: flex; gap: 7px; }
 .action-btn {
   background: none; border: 1px solid #2a2a36; color: #444;
-  border-radius: 6px; padding: 4px 10px; font-size: 11px;
-  cursor: pointer; transition: all 0.2s;
+  border-radius: 6px; padding: 4px 10px; font-size: 11px; cursor: pointer; transition: all 0.2s;
 }
 .action-btn.export:hover { border-color: #4f6ef7; color: #4f6ef7; }
 .action-btn.clear:hover  { border-color: #e74c3c; color: #e74c3c; }
 
 .history-list {
-  flex: 1; overflow-y: auto;
-  padding: 18px 20px;
+  flex: 1; overflow-y: auto; padding: 18px 20px;
   display: flex; flex-direction: column; gap: 10px;
 }
 .history-list::-webkit-scrollbar { width: 4px; }
-.history-list::-webkit-scrollbar-track { background: transparent; }
 .history-list::-webkit-scrollbar-thumb { background: #2a2a36; border-radius: 4px; }
 
 .session-mark {
@@ -197,41 +160,39 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
 }
 .session-mark::before, .session-mark::after { content:''; flex:1; height:1px; background:#1e1e26; }
 
+/* Bubbles */
 .bubble-wrap {
   display: flex; flex-direction: column; gap: 3px;
-  max-width: 78%;
-  animation: fadeUp 0.25s ease;
+  max-width: 78%; animation: fadeUp 0.25s ease;
 }
-.bubble-wrap.side-p1 { align-self: flex-end; align-items: flex-end; }
-.bubble-wrap.side-p2 { align-self: flex-start; align-items: flex-start; }
+.bubble-wrap.side-right { align-self: flex-end; align-items: flex-end; }
+.bubble-wrap.side-left  { align-self: flex-start; align-items: flex-start; }
 @keyframes fadeUp { from{opacity:0;transform:translateY(7px)} to{opacity:1;transform:translateY(0)} }
 
 .bubble-meta { font-size: 10px; color: #444; padding: 0 4px; display: flex; gap: 6px; align-items: center; }
 .bubble { border-radius: 14px; padding: 10px 13px; display: flex; flex-direction: column; gap: 0; }
-.side-p1 .bubble { background: #18243e; border-bottom-right-radius: 4px; }
-.side-p2 .bubble { background: #141e14; border-bottom-left-radius: 4px; }
+.side-right .bubble { border-bottom-right-radius: 4px; }
+.side-left  .bubble { border-bottom-left-radius: 4px; }
+
 .bubble-orig { font-size: 14px; color: #ddd; line-height: 1.6; font-weight: 500; }
 .bubble-trans {
-  font-size: 12px; color: #4a6070; line-height: 1.55;
-  margin-top: 5px; padding-top: 5px;
-  border-top: 1px solid rgba(255,255,255,0.05);
+  font-size: 12px; line-height: 1.55; margin-top: 5px; padding-top: 5px;
+  border-top: 1px solid rgba(255,255,255,0.06); color: #6a8a9a;
+  font-style: italic;
 }
-.side-p2 .bubble-trans { color: #3a6a4a; }
-.bubble-btns { display: flex; gap: 8px; align-items: center; padding-top: 4px; }
-
+.bubble-btns { display: flex; gap: 8px; align-items: center; padding-top: 5px; }
 .replay-btn {
   background: none; border: none; color: #333; font-size: 10px;
   cursor: pointer; padding: 0; transition: color 0.2s;
 }
 .replay-btn:hover { color: #4f6ef7; }
-
-.trans-inline-btn {
-  background: none; border: 1px solid #2a3a4a; color: #4f9ef7;
+.trans-btn-sm {
+  background: none; border: 1px solid #2a3550; color: #4f8ef7;
   border-radius: 4px; font-size: 10px; padding: 2px 7px;
   cursor: pointer; transition: all 0.2s;
 }
-.trans-inline-btn:hover { background: #0d1828; }
-.trans-inline-btn:disabled { opacity: 0.5; cursor: default; }
+.trans-btn-sm:hover { background: #0d1828; }
+.trans-btn-sm:disabled { opacity: 0.4; cursor: default; }
 
 .empty-state {
   flex: 1; display: flex; flex-direction: column;
@@ -240,118 +201,82 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
 .empty-state .icon { font-size: 44px; }
 .empty-state p { font-size: 13px; }
 
-/* ── Speak Panel (오른쪽 말하기) ── */
-.speak-panel {
-  width: 320px; flex-shrink: 0;
-  display: flex; flex-direction: column; overflow: hidden;
-}
-.speak-panel .panel-header { border-bottom: 1px solid #1e1e26; }
+/* ── Speak Panel ── */
+.speak-panel { width: 310px; flex-shrink: 0; display: flex; flex-direction: column; overflow: hidden; }
 
 .speak-lang-bar {
-  padding: 10px 16px;
-  border-bottom: 1px solid #1e1e26;
-  display: flex; align-items: center; gap: 8px;
-  flex-shrink: 0;
-  background: #0a0a0e;
+  padding: 10px 16px; border-bottom: 1px solid #1e1e26;
+  display: flex; align-items: center; gap: 8px; flex-shrink: 0; background: #0a0a0e;
 }
 .speak-lang-bar label { font-size: 11px; color: #555; white-space: nowrap; }
 .speak-arrow { font-size: 14px; color: #333; }
 
+.speak-input-area {
+  padding: 14px 16px 10px; border-bottom: 1px solid #1e1e26;
+  display: flex; flex-direction: column; gap: 8px; flex-shrink: 0;
+}
 .speak-textarea {
-  width: 100%; min-height: 100px; resize: none;
-  background: #13131a; color: #ddd;
+  width: 100%; resize: none; background: #13131a; color: #ddd;
   border: 1px solid #2a2a36; border-radius: 10px;
   padding: 10px 12px; font-size: 13px; line-height: 1.6;
-  font-family: inherit; outline: none;
-  transition: border-color 0.2s;
+  font-family: inherit; outline: none; transition: border-color 0.2s;
 }
 .speak-textarea:focus { border-color: #4f6ef7; }
 .speak-textarea::placeholder { color: #333; }
-
 .trans-btn {
-  width: 100%; padding: 9px; border: none;
-  background: #4f6ef7; color: #fff;
-  border-radius: 9px; font-size: 13px; font-weight: 600;
+  width: 100%; padding: 9px; border: none; background: #4f6ef7;
+  color: #fff; border-radius: 9px; font-size: 13px; font-weight: 600;
   cursor: pointer; transition: all 0.2s;
 }
 .trans-btn:hover { background: #3a58d4; }
-.trans-btn:active { transform: scale(0.98); }
-
-/* ── Speak panel body ── */
-.speak-input-area {
-  padding: 14px 16px 10px;
-  border-bottom: 1px solid #1e1e26;
-  display: flex; flex-direction: column; gap: 8px;
-  flex-shrink: 0;
-}
 
 .speak-history {
-  flex: 1; overflow-y: auto;
-  padding: 12px 14px;
+  flex: 1; overflow-y: auto; padding: 12px 14px;
   display: flex; flex-direction: column; gap: 10px;
 }
 .speak-history::-webkit-scrollbar { width: 4px; }
 .speak-history::-webkit-scrollbar-thumb { background: #2a2a36; border-radius: 4px; }
 
-.speak-empty {
-  flex: 1; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 8px;
-  color: #2a2a36; font-size: 13px;
-}
+.speak-empty { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; color:#2a2a36; font-size:13px; }
 
 .speak-item {
-  background: #13131a;
-  border: 1px solid #1e1e26;
-  border-radius: 10px;
-  padding: 10px 12px;
-  display: flex; flex-direction: column; gap: 6px;
+  background: #13131a; border: 1px solid #1e1e26; border-radius: 10px;
+  padding: 10px 12px; display: flex; flex-direction: column; gap: 6px;
   animation: fadeUp 0.2s ease;
 }
-.speak-item-orig {
-  font-size: 12px; color: #555; line-height: 1.5;
-}
+.speak-item-orig { font-size: 12px; color: #555; line-height: 1.5; }
 .speak-item-divider { height: 1px; background: #1e1e26; }
-.speak-item-trans {
-  font-size: 14px; color: #aee8b0; line-height: 1.6; font-weight: 500;
-}
-.speak-item-footer {
-  display: flex; align-items: center; justify-content: space-between;
-  padding-top: 2px;
-}
+.speak-item-trans { font-size: 14px; color: #aee8b0; line-height: 1.6; font-weight: 500; }
+.speak-item-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 2px; }
 .speak-item-time { font-size: 10px; color: #333; }
 .speak-item-actions { display: flex; gap: 6px; }
 .speak-item-btn {
   background: none; border: 1px solid #2a2a36; color: #444;
-  border-radius: 6px; padding: 3px 9px; font-size: 11px;
-  cursor: pointer; transition: all 0.2s;
+  border-radius: 6px; padding: 3px 9px; font-size: 11px; cursor: pointer; transition: all 0.2s;
 }
 .speak-item-btn:hover { border-color: #4f6ef7; color: #4f6ef7; }
 .speak-item-btn.play { border-color: #1a4020; color: #2ecc71; }
 .speak-item-btn.play:hover { background: #0a1a0a; }
 
-.speak-footer {
-  padding: 10px 14px;
-  border-top: 1px solid #1e1e26;
-  flex-shrink: 0;
-}
+.speak-footer { padding: 10px 14px; border-top: 1px solid #1e1e26; flex-shrink: 0; }
 
-/* ── Float speak btn ── */
+/* Float speak */
 #floatSpeakBtn {
   display: none; position: fixed; z-index: 9999;
-  background: #4f6ef7; color: #fff; border: none;
-  border-radius: 20px; padding: 5px 12px; font-size: 12px;
-  cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.4); white-space: nowrap;
+  background: #4f6ef7; color: #fff; border: none; border-radius: 20px;
+  padding: 5px 12px; font-size: 12px; cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.4); white-space: nowrap;
 }
 #floatSpeakBtn:hover { background: #3a58d4; }
 </style>
 </head>
 <body>
 
-<!-- ── 헤더 ── -->
+<!-- ── Header ── -->
 <div class="header">
   <h1>통역기</h1>
   <div class="header-right">
-    <button class="settings-btn" id="settingsBtn" onclick="toggleSettings()">⚙ 기록 설정</button>
+    <button class="settings-btn" id="settingsBtn" onclick="toggleSettings()">⚙ 설정</button>
     <button class="record-btn" id="recordBtn" onclick="toggleRecord()">
       <span class="record-dot"></span>
       <span id="recordLabel">대화 기록 시작</span>
@@ -359,84 +284,54 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
   </div>
 </div>
 
-<!-- ── 기록 설정 패널 ── -->
+<!-- ── 설정 패널 ── -->
 <div class="settings-panel" id="settingsPanel">
-  <div class="settings-row">
-    <div class="settings-group">
-      <div class="settings-label">👥 화자 설정</div>
-      <div class="person-row">
-        <div class="person-badge p1-badge">P1</div>
-        <input type="text" id="p1Name" value="사람 1" placeholder="이름">
-        <select id="p1Lang">
-          <option value="ko" selected>한국어 🇰🇷</option>
-          <option value="en">English 🇺🇸</option>
-          <option value="ja">日本語 🇯🇵</option>
-          <option value="zh">中文 🇨🇳</option>
-        </select>
-      </div>
-      <div class="person-row">
-        <div class="person-badge p2-badge">P2</div>
-        <input type="text" id="p2Name" value="사람 2" placeholder="이름">
-        <select id="p2Lang">
-          <option value="en" selected>English 🇺🇸</option>
-          <option value="ko">한국어 🇰🇷</option>
-          <option value="ja">日本語 🇯🇵</option>
-          <option value="zh">中文 🇨🇳</option>
-        </select>
-      </div>
-    </div>
 
-    <div class="settings-divider"></div>
+  <div class="settings-group">
+    <div class="settings-label">🔊 TTS</div>
+    <label class="checkbox-row"><input type="checkbox" id="ttsTrans"> 번역문 자동 읽기</label>
+  </div>
 
-    <div class="settings-group">
-      <div class="settings-label">🌐 번역 표시 (말풍선 괄호)</div>
-      <div class="trans-group">
-        <label class="checkbox-row"><input type="checkbox" id="transKoEn"> 한국어 → 영어 표시</label>
-        <label class="checkbox-row"><input type="checkbox" id="transEnKo" checked> 영어 → 한국어 표시</label>
-        <label class="checkbox-row"><input type="checkbox" id="transJaKo"> 일본어 → 한국어 표시</label>
-        <label class="checkbox-row"><input type="checkbox" id="transZhKo"> 중국어 → 한국어 표시</label>
-      </div>
-    </div>
+  <div class="settings-divider"></div>
 
-    <div class="settings-divider"></div>
-
-    <div class="settings-group">
-      <div class="settings-label">🔊 TTS 설정</div>
-      <label class="checkbox-row"><input type="checkbox" id="ttsTrans"> 번역문 자동 읽기</label>
-      <label class="checkbox-row"><input type="checkbox" id="ttsOrig"> 원문 자동 읽기</label>
+  <div class="settings-group" id="speakerLegendGroup">
+    <div class="settings-label">👥 감지된 화자</div>
+    <div class="speaker-legend" id="speakerLegend">
+      <span style="font-size:11px;color:#444">기록 시작 후 자동 감지</span>
     </div>
   </div>
+
+  <div class="settings-divider"></div>
+
+  <div class="settings-group">
+    <div class="settings-label">목소리 감도</div>
+    <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:#666">
+      <span>낮음</span>
+      <input type="range" id="pitchThreshold" min="20" max="80" value="45" style="width:100px">
+      <span>높음</span>
+    </div>
+    <span style="font-size:10px;color:#444">화자 구분 민감도</span>
+  </div>
+
 </div>
 
-<!-- 드래그 말하기 -->
 <button id="floatSpeakBtn" onclick="speakSelected()">🔊 말하기</button>
 
-<!-- ── 메인 3단 ── -->
 <div class="main">
 
-  <!-- 왼쪽: 마이크 컨트롤 -->
+  <!-- 왼쪽: 마이크 -->
   <div class="left-panel">
-    <div class="lang-badge" id="langBadge">🌐 기록 시작 후 말하면 감지</div>
+    <div class="lang-badge" id="langBadge">🌐 기록 시작 후 활성화</div>
 
     <div class="mic-area">
       <button class="mic-btn inactive" id="micBtn" onclick="toggleManual()">🎙️</button>
       <span class="mic-label" id="micLabel">기록 시작 후 활성화</span>
     </div>
 
-    <div class="speaker-indicator" id="speakerNow">— 화자 감지 대기 중 —</div>
+    <div class="speaker-now" id="speakerNow">— 화자 감지 대기 중 —</div>
 
     <div class="current-box">
       <div class="current-orig" id="curOrig">—</div>
-      <div class="current-divider"></div>
-      <div class="current-trans" id="curTrans">—</div>
-    </div>
-
-    <div class="always-row">
-      <label class="tog-wrap">
-        <input type="checkbox" id="alwaysOn" onchange="toggleAlwaysOn()">
-        <span class="tog-track"></span>
-      </label>
-      <span class="always-label">항상 듣기 <span id="alwaysLabel">OFF</span></span>
     </div>
 
     <div class="voice-section">
@@ -468,7 +363,7 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
     <div class="panel-header">
       <span class="panel-title">💬 대화 기록</span>
       <div class="panel-actions">
-        <button class="action-btn export" onclick="exportHistory()">내보내기</button>
+        <button class="action-btn export" onclick="exportToExcel()">내보내기</button>
         <button class="action-btn clear" onclick="clearHistory()">지우기</button>
       </div>
     </div>
@@ -480,13 +375,11 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
     </div>
   </div>
 
-  <!-- 오른쪽: 말하기 (타이핑 번역) -->
+  <!-- 오른쪽: 말하기 -->
   <div class="speak-panel">
     <div class="panel-header">
       <span class="panel-title">✏️ 말하기</span>
     </div>
-
-    <!-- 언어 설정 바 -->
     <div class="speak-lang-bar">
       <label>번역</label>
       <select id="speakFrom">
@@ -503,28 +396,17 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
         <option value="zh">中文 🇨🇳</option>
       </select>
     </div>
-
-    <!-- 입력 영역 (고정) -->
     <div class="speak-input-area">
-      <textarea
-        class="speak-textarea"
-        id="speakInput"
-        placeholder="여기에 입력하세요... (Ctrl+Enter로 번역)"
-        onkeydown="handleSpeakKey(event)"
-        rows="3"
-      ></textarea>
+      <textarea class="speak-textarea" id="speakInput"
+        placeholder="여기에 입력하세요... (Ctrl+Enter)" onkeydown="handleSpeakKey(event)" rows="3"></textarea>
       <button class="trans-btn" onclick="translateTyped()">번역하기 →</button>
     </div>
-
-    <!-- 번역 결과 누적 목록 -->
     <div class="speak-history" id="speakHistory">
       <div class="speak-empty" id="speakEmpty">
         <span style="font-size:32px">✏️</span>
         <p>입력 후 번역하기를 누르세요</p>
       </div>
     </div>
-
-    <!-- 하단 지우기 -->
     <div class="speak-footer">
       <button class="action-btn clear" onclick="clearSpeakHistory()" style="width:100%">목록 지우기</button>
     </div>
@@ -533,30 +415,151 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
 </div>
 
 <script>
-  /* ── 상태 ── */
+  /* ══════════════════════════════════════
+     상태
+  ══════════════════════════════════════ */
   let recognition   = null;
   let isListening   = false;
   let isRecording   = false;
-  let alwaysOn      = false;
   let shouldRestart = false;
   let voices        = [];
   let bubbleCount   = 0;
   let sessionCount  = 0;
-  let lastDetected  = null;
+  let speakItemCount = 0;
 
-  /* ── 목소리 로드 ── */
+  /* ── 화자 프로파일 ── */
+  const SPEAKER_COLORS = ['#4f6ef7','#2ecc71','#e67e22','#e74c3c','#9b59b6','#1abc9c','#f39c12'];
+  let speakerProfiles = []; // { id, name, avgPitch, color, side }
+
+  /* ── 오디오 분석 (피치 감지) ── */
+  let audioCtx     = null;
+  let audioStream  = null;
+  let analyser     = null;
+  let pitchSamples = []; // { time, pitch }
+  let pitchTimer   = null;
+
+  async function startAudioCapture() {
+    try {
+      audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      audioCtx    = new (window.AudioContext || window.webkitAudioContext)();
+      const src   = audioCtx.createMediaStreamSource(audioStream);
+      analyser    = audioCtx.createAnalyser();
+      analyser.fftSize = 2048;
+      src.connect(analyser);
+      schedulePitch();
+    } catch(e) {
+      console.warn('마이크 직접 접근 불가, 언어 기반 감지로 대체:', e);
+    }
+  }
+
+  function stopAudioCapture() {
+    clearTimeout(pitchTimer);
+    pitchTimer  = null;
+    if (audioStream) audioStream.getTracks().forEach(t => t.stop());
+    if (audioCtx)    audioCtx.close();
+    audioCtx = audioStream = analyser = null;
+    pitchSamples = [];
+  }
+
+  function schedulePitch() {
+    if (!isRecording || !analyser) return;
+    const buf = new Float32Array(analyser.fftSize);
+    analyser.getFloatTimeDomainData(buf);
+    const p = autocorrelate(buf, audioCtx.sampleRate);
+    if (p > 60 && p < 450) {
+      pitchSamples.push({ time: Date.now(), pitch: p });
+      const cut = Date.now() - 6000;
+      pitchSamples = pitchSamples.filter(s => s.time > cut);
+    }
+    pitchTimer = setTimeout(schedulePitch, 80);
+  }
+
+  function autocorrelate(buf, sr) {
+    const N = buf.length;
+    let rms = 0;
+    for (let i = 0; i < N; i++) rms += buf[i] * buf[i];
+    if (Math.sqrt(rms / N) < 0.008) return -1;
+
+    let r1 = 0, r2 = N - 1;
+    for (let i = 0; i < N / 2; i++) if (Math.abs(buf[i]) < 0.2) { r1 = i; break; }
+    for (let i = 1; i < N / 2; i++) if (Math.abs(buf[N - i]) < 0.2) { r2 = N - i; break; }
+    const b = buf.slice(r1, r2);
+    const n = b.length;
+    const c = new Float32Array(n);
+    for (let i = 0; i < n; i++) for (let j = 0; j < n - i; j++) c[i] += b[j] * b[j + i];
+    let d = 0;
+    while (c[d] > c[d + 1]) d++;
+    let mx = -1, mp = -1;
+    for (let i = d; i < n; i++) if (c[i] > mx) { mx = c[i]; mp = i; }
+    if (mp < 1) return -1;
+    const x1 = c[mp-1], x2 = c[mp], x3 = c[mp+1] || 0;
+    const a = (x1 + x3 - 2*x2) / 2;
+    const T = a ? mp - (x3-x1)/(4*a) : mp;
+    return sr / T;
+  }
+
+  function getRecentPitch() {
+    const cut    = Date.now() - 3000;
+    const recent = pitchSamples.filter(s => s.time > cut);
+    if (recent.length < 5) return null;
+    return recent.reduce((s, p) => s + p.pitch, 0) / recent.length;
+  }
+
+  /* ── 화자 감지 ── */
+  function findOrCreateSpeaker(pitch) {
+    const threshold = parseInt(document.getElementById('pitchThreshold').value) || 45;
+
+    if (pitch && pitch > 0) {
+      for (const sp of speakerProfiles) {
+        if (Math.abs(sp.avgPitch - pitch) < threshold) {
+          sp.avgPitch = sp.avgPitch * 0.85 + pitch * 0.15;
+          return sp;
+        }
+      }
+    } else if (speakerProfiles.length > 0 && !pitch) {
+      // 피치 감지 불가 → 마지막 화자 유지
+      return speakerProfiles[speakerProfiles.length - 1];
+    }
+
+    // 새 화자
+    const idx = speakerProfiles.length;
+    const sp  = {
+      id:       idx + 1,
+      name:     `사람 ${idx + 1}`,
+      avgPitch: pitch || 160,
+      color:    SPEAKER_COLORS[idx % SPEAKER_COLORS.length],
+      side:     idx === 0 ? 'right' : 'left',
+    };
+    speakerProfiles.push(sp);
+    updateSpeakerLegend();
+    return sp;
+  }
+
+  function updateSpeakerLegend() {
+    const leg = document.getElementById('speakerLegend');
+    leg.innerHTML = speakerProfiles.map(sp => `
+      <div class="speaker-chip">
+        <div class="speaker-dot" style="background:${sp.color}"></div>
+        <span>${sp.name}</span>
+        ${sp.avgPitch ? `<span style="color:#333;font-size:10px">(${Math.round(sp.avgPitch)}Hz)</span>` : ''}
+      </div>
+    `).join('') || '<span style="font-size:11px;color:#444">아직 없음</span>';
+  }
+
+  /* ══════════════════════════════════════
+     목소리 로드
+  ══════════════════════════════════════ */
   function loadVoices() {
     voices = speechSynthesis.getVoices();
     const sel = document.getElementById('voiceSelect');
     sel.innerHTML = '';
     voices.forEach((v, i) => {
       const o = document.createElement('option');
-      o.value = i;
-      o.textContent = `${v.name} (${v.lang})`;
+      o.value = i; o.textContent = `${v.name} (${v.lang})`;
       sel.appendChild(o);
     });
-    const koIdx = voices.findIndex(v => v.lang.startsWith('ko'));
-    if (koIdx >= 0) sel.value = koIdx;
+    const ki = voices.findIndex(v => v.lang.startsWith('ko'));
+    if (ki >= 0) sel.value = ki;
   }
   speechSynthesis.onvoiceschanged = loadVoices;
   loadVoices();
@@ -565,51 +568,47 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
     const v = document.getElementById(type + 'Slider').value;
     document.getElementById(type + 'Val').textContent = parseFloat(v).toFixed(2);
   }
+  function testVoice() { speak('안녕하세요 목소리 테스트입니다 Hello voice test', 'ko-KR'); }
 
-  function testVoice() {
-    speak(lastDetected === 'ko' ? '안녕하세요, 목소리 테스트입니다.' : 'Hello, this is a voice test.',
-          lastDetected === 'ko' ? 'ko-KR' : 'en-US');
-  }
-
-  /* ── 설정 패널 ── */
+  /* ══════════════════════════════════════
+     설정
+  ══════════════════════════════════════ */
   function toggleSettings() {
     document.getElementById('settingsPanel').classList.toggle('open');
     document.getElementById('settingsBtn').classList.toggle('open');
   }
 
-  /* ── 기록 시작/종료 ── */
+  /* ══════════════════════════════════════
+     기록 시작/종료
+  ══════════════════════════════════════ */
   function toggleRecord() {
     isRecording = !isRecording;
     const btn   = document.getElementById('recordBtn');
     const label = document.getElementById('recordLabel');
-    const mic   = document.getElementById('micBtn');
 
     if (isRecording) {
       btn.classList.add('active');
       label.textContent = '기록 종료';
-      mic.classList.remove('inactive');
+      document.getElementById('micBtn').classList.remove('inactive');
       document.getElementById('micLabel').textContent = '듣는 중...';
-      setBadge('👂 듣고 있어요...', '');
+      setBadge('👂 듣고 있어요...', true);
       addSessionMark();
-      // 기록 시작 시 항상 듣기 자동 ON
-      alwaysOn = true;
-      document.getElementById('alwaysOn').checked = true;
-      document.getElementById('alwaysLabel').textContent = 'ON';
-      shouldRestart = true;
-      startListening();
+      speakerProfiles = [];
+      updateSpeakerLegend();
+      startAudioCapture().then(() => {
+        shouldRestart = true;
+        startListening();
+      });
     } else {
       btn.classList.remove('active');
       label.textContent = '대화 기록 시작';
-      mic.classList.add('inactive');
+      document.getElementById('micBtn').classList.add('inactive');
       document.getElementById('micLabel').textContent = '기록 시작 후 활성화';
-      setBadge('🌐 기록 시작 후 말하면 감지', '');
-      alwaysOn = false;
-      document.getElementById('alwaysOn').checked = false;
-      document.getElementById('alwaysLabel').textContent = 'OFF';
+      setBadge('🌐 기록 시작 후 활성화', false);
       shouldRestart = false;
       stopListening();
-      // 기록 종료 시 자동 엑셀 저장
-      setTimeout(() => exportToExcel(), 400);
+      stopAudioCapture();
+      setTimeout(exportToExcel, 400);
     }
   }
 
@@ -618,156 +617,69 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
     const empty = document.getElementById('emptyState');
     if (empty) empty.remove();
     sessionCount++;
-    const t = new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+    const t = new Date().toLocaleTimeString('ko-KR', { hour:'2-digit', minute:'2-digit' });
     const m = document.createElement('div');
-    m.className   = 'session-mark';
+    m.className = 'session-mark';
     m.textContent = `세션 ${sessionCount} 시작 · ${t}`;
     list.appendChild(m);
     list.scrollTop = list.scrollHeight;
   }
 
-  function toggleAlwaysOn() {
-    alwaysOn = document.getElementById('alwaysOn').checked;
-    document.getElementById('alwaysLabel').textContent = alwaysOn ? 'ON' : 'OFF';
-    if (!isRecording) return;
-    if (alwaysOn) { shouldRestart = true; startListening(); }
-    else          { shouldRestart = false; stopListening(); }
-  }
-
   function toggleManual() {
-    // 드래그로 선택된 텍스트가 있으면 → TTS
-    const sel  = window.getSelection()?.toString().trim();
+    const sel = window.getSelection()?.toString().trim();
     if (sel) {
       const isKo = /[\uAC00-\uD7AF]/.test(sel);
-      const isJa = /[\u3040-\u30FF]/.test(sel);
-      const lang = isKo ? 'ko-KR' : isJa ? 'ja-JP' : 'en-US';
-      speak(sel, lang);
+      speak(sel, isKo ? 'ko-KR' : 'en-US');
       window.getSelection()?.removeAllRanges();
       return;
     }
-    // 선택 없으면 기존 녹음 토글
-    if (!isRecording || alwaysOn) return;
-    isListening ? (() => { shouldRestart = false; stopListening(); })() : startListening();
+    if (!isRecording) return;
+    if (isListening) { shouldRestart = false; stopListening(); }
+    else             { shouldRestart = true;  startListening(); }
   }
 
-  /* ── 화자 감지 ── */
-  function detectSpeaker(text) {
-    const koChars = (text.match(/[\uAC00-\uD7AF\u3131-\u314E]/g) || []).length;
-    const isJa    = /[\u3040-\u30FF]/.test(text);
-    const isZh    = /[\u4E00-\u9FFF]/.test(text) && !isJa;
-
-    let lang = 'en';
-    if (koChars > 0) lang = 'ko';           // 한국어 한 글자라도 있으면 ko
-    else if (isJa)   lang = 'ja';
-    else if (isZh)   lang = 'zh';
-    // 영어로 판정하려면 순수 영어 단어 2개 이상 있어야 함
-    else {
-      const engWords = text.trim().split(/\s+/).filter(w => /^[a-zA-Z]{2,}$/.test(w));
-      if (engWords.length < 2) lang = 'ko'; // 애매하면 P1 기본값
-    }
-
-    const p1l   = document.getElementById('p1Lang').value;
-    const p2l   = document.getElementById('p2Lang').value;
-    const person = (p1l === lang) ? 1 : (p2l === lang) ? 2 : 1;
-    return { person, lang };
-  }
-
-  function getTransTarget(lang) {
-    if (lang === 'ko' && document.getElementById('transKoEn').checked) return 'en';
-    if (lang === 'en' && document.getElementById('transEnKo').checked) return 'ko';
-    if (lang === 'ja' && document.getElementById('transJaKo').checked) return 'ko';
-    if (lang === 'zh' && document.getElementById('transZhKo').checked) return 'ko';
-    return null;
-  }
-
-  /* ── 음성 인식 ── */
+  /* ══════════════════════════════════════
+     음성 인식
+  ══════════════════════════════════════ */
   function startListening() {
     if (isListening || !isRecording) return;
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-      setBadge('❌ Chrome이 필요해요', ''); return;
+      setBadge('❌ Chrome이 필요해요', false); return;
     }
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     recognition = new SR();
-    recognition.lang = 'ko-KR';
-    recognition.interimResults = false;
+    recognition.lang            = 'ko-KR';
+    recognition.interimResults  = false;
     recognition.maxAlternatives = 1;
-    recognition.continuous = true;
+    recognition.continuous      = true;
 
     recognition.onstart = () => {
       isListening = true;
-      const mic = document.getElementById('micBtn');
-      mic.classList.add('listening');
-      mic.textContent = '🎙️';
-      document.getElementById('micLabel').textContent = alwaysOn ? '항상 듣기 ON' : '듣는 중...';
-      setBadge('👂 듣고 있어요...', '');
+      document.getElementById('micBtn').classList.add('listening');
+      document.getElementById('micBtn').textContent = '🎙️';
+      document.getElementById('micLabel').textContent = '듣는 중...';
+      setBadge('👂 듣고 있어요...', true);
     };
 
     recognition.onresult = async (e) => {
-      // continuous 모드: 새로 확정된 결과만 처리
       for (let i = e.resultIndex; i < e.results.length; i++) {
         if (!e.results[i].isFinal) continue;
-        await handleTranscript(e.results[i][0].transcript.trim());
+        const transcript = e.results[i][0].transcript.trim();
+        if (transcript) await handleTranscript(transcript);
       }
     };
 
-    async function handleTranscript(transcript) {
-      if (!transcript) return;
-
-      const { person, lang } = detectSpeaker(transcript);
-      lastDetected = lang;
-
-      const p1n = document.getElementById('p1Name').value || '사람 1';
-      const p2n = document.getElementById('p2Name').value || '사람 2';
-      const name = person === 1 ? p1n : p2n;
-      const cls  = person === 1 ? 'p1' : 'p2';
-
-      const si = document.getElementById('speakerNow');
-      si.textContent = `🗣 ${name}`;
-      si.className   = `speaker-indicator ${cls}`;
-
-      const flagMap  = { ko:'🇰🇷', en:'🇺🇸', ja:'🇯🇵', zh:'🇨🇳' };
-      const langName = { ko:'한국어', en:'English', ja:'日本語', zh:'中文' };
-      setBadge(`${flagMap[lang]||''} ${langName[lang]||lang} · ${name}`, lang === 'ko' ? 'ko' : 'en');
-
-      document.getElementById('curOrig').textContent  = transcript;
-      document.getElementById('curTrans').textContent = '번역 중...';
-
-      const toTarget = getTransTarget(lang);
-      let translated = null;
-
-      if (toTarget) {
-        try {
-          translated = await fetchTrans(transcript, lang, toTarget);
-          document.getElementById('curTrans').textContent = translated;
-        } catch {
-          document.getElementById('curTrans').textContent = '번역 실패';
-        }
-      } else {
-        document.getElementById('curTrans').textContent = '(번역 설정 없음)';
-      }
-
-      addBubble(transcript, translated, person, name, cls, lang, toTarget);
-
-      if (document.getElementById('ttsOrig').checked) {
-        const tl = { ko:'ko-KR', en:'en-US', ja:'ja-JP', zh:'zh-CN' }[lang] || 'en-US';
-        speak(transcript, tl);
-      } else if (document.getElementById('ttsTrans').checked && translated) {
-        const tl = { ko:'ko-KR', en:'en-US', ja:'ja-JP', zh:'zh-CN' }[toTarget] || 'en-US';
-        speak(translated, tl);
-      }
-    }
-
     recognition.onerror = (e) => {
-      if (e.error !== 'no-speech') setBadge('오류: ' + e.error, '');
+      if (e.error === 'no-speech') return;
+      setBadge('오류: ' + e.error, false);
     };
 
     recognition.onend = () => {
       isListening = false;
-      const mic = document.getElementById('micBtn');
-      mic.classList.remove('listening');
-      mic.textContent = '🎙️';
-      if (shouldRestart && alwaysOn && isRecording) {
-        setTimeout(startListening, 300);
+      document.getElementById('micBtn').classList.remove('listening');
+      document.getElementById('micBtn').textContent = '🎙️';
+      if (shouldRestart && isRecording) {
+        setTimeout(startListening, 200);
       } else {
         document.getElementById('micLabel').textContent = isRecording ? '눌러서 말하기' : '기록 시작 후 활성화';
       }
@@ -780,56 +692,53 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
     shouldRestart = false;
     if (recognition) { try { recognition.stop(); } catch(_) {} }
     isListening = false;
-    const mic = document.getElementById('micBtn');
-    mic.classList.remove('listening');
-    mic.textContent = '🎙️';
+    document.getElementById('micBtn').classList.remove('listening');
+    document.getElementById('micBtn').textContent = '🎙️';
   }
 
-  /* ── 번역 API ── */
-  async function fetchTrans(text, from, to) {
-    const url  = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${encodeURIComponent(text)}`;
-    const res  = await fetch(url);
-    const data = await res.json();
-    return data[0].map(x => x[0]).join('');
+  async function handleTranscript(transcript) {
+    const pitch   = getRecentPitch();
+    const speaker = findOrCreateSpeaker(pitch);
+
+    document.getElementById('curOrig').textContent = transcript;
+    const si = document.getElementById('speakerNow');
+    si.textContent = `🗣 ${speaker.name}`;
+    si.style.color  = speaker.color;
+    si.style.borderColor = speaker.color + '55';
+    si.style.background  = speaker.color + '11';
+
+    setBadge(`🗣 ${speaker.name}`, true);
+    addBubble(transcript, speaker);
   }
 
-  /* ── 히스토리 말풍선 ── */
-  function addBubble(orig, translated, person, name, cls, origLang, transLang) {
+  /* ══════════════════════════════════════
+     말풍선
+  ══════════════════════════════════════ */
+  function addBubble(orig, speaker) {
     const list = document.getElementById('historyList');
     const t    = new Date().toLocaleTimeString('ko-KR', { hour:'2-digit', minute:'2-digit' });
-    const flag = { ko:'🇰🇷', en:'🇺🇸', ja:'🇯🇵', zh:'🇨🇳' }[origLang] || '';
     const id   = 'b' + (++bubbleCount);
-    const nameColor = person === 1 ? '#4f6ef7' : '#2ecc71';
-    const ttsLang   = transLang
-      ? ({ ko:'ko-KR', en:'en-US', ja:'ja-JP', zh:'zh-CN' }[transLang] || 'en-US')
-      : ({ ko:'ko-KR', en:'en-US', ja:'ja-JP', zh:'zh-CN' }[origLang]  || 'en-US');
 
-    const transHtml = translated
-      ? `<div class="bubble-trans">(${esc(translated)})</div>`
-      : `<div class="bubble-trans-placeholder" id="${id}-trans"></div>`;
-
-    // 번역 버튼: 이미 번역됐으면 숨김
-    const transBtn = translated
-      ? ''
-      : `<button class="trans-inline-btn" onclick="translateBubble('${id}','${esc(orig)}','${origLang}')">🌐 번역</button>`;
+    const bgColor   = speaker.color + '22';
+    const bordColor = speaker.color + '44';
 
     const wrap = document.createElement('div');
     wrap.id        = id;
-    wrap.className = `bubble-wrap side-${cls}`;
+    wrap.className = `bubble-wrap side-${speaker.side}`;
     wrap.dataset.orig = orig;
-    wrap.dataset.origlang = origLang;
-    wrap.dataset.text = translated || orig;
-    wrap.dataset.lang = ttsLang;
+    wrap.dataset.text = orig;
+    wrap.dataset.lang = 'ko-KR';
     wrap.innerHTML = `
       <div class="bubble-meta">
-        ${flag} <strong style="color:${nameColor}">${esc(name)}</strong>
+        <span class="speaker-dot" style="background:${speaker.color};width:8px;height:8px;border-radius:50%;display:inline-block"></span>
+        <strong style="color:${speaker.color}">${esc(speaker.name)}</strong>
         <span>${t}</span>
       </div>
-      <div class="bubble">
+      <div class="bubble" style="background:${bgColor};border:1px solid ${bordColor}">
         <div class="bubble-orig">${esc(orig)}</div>
-        ${transHtml}
+        <div class="bubble-trans-area" id="${id}-trans"></div>
         <div class="bubble-btns">
-          ${transBtn}
+          <button class="trans-btn-sm" onclick="translateBubble('${id}')">🌐 번역</button>
           <button class="replay-btn" onclick="replayBubble('${id}')">▶ 듣기</button>
         </div>
       </div>
@@ -838,143 +747,135 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
     list.scrollTop = list.scrollHeight;
   }
 
-  function replayBubble(id) {
-    const el = document.getElementById(id);
-    if (el) speak(el.dataset.text, el.dataset.lang);
-  }
+  async function translateBubble(id) {
+    const wrap  = document.getElementById(id);
+    const btn   = wrap?.querySelector('.trans-btn-sm');
+    const area  = document.getElementById(id + '-trans');
+    if (!wrap || !area) return;
 
-  async function translateBubble(id, orig, fromLang) {
-    const btn     = document.querySelector(`#${id} .trans-inline-btn`);
-    const transEl = document.getElementById(`${id}-trans`);
-    if (!btn || !transEl) return;
+    const orig   = wrap.dataset.orig;
+    const isKo   = /[\uAC00-\uD7AF\u3131-\u314E]/.test(orig);
+    const from   = isKo ? 'ko' : 'en';
+    const to     = isKo ? 'en' : 'ko';
 
     btn.textContent = '...';
     btn.disabled    = true;
 
-    // 번역 방향: 설정에 따르거나 기본 반대 언어
-    const toMap = { ko:'en', en:'ko', ja:'ko', zh:'ko' };
-    const toLang = toMap[fromLang] || 'en';
-
     try {
-      const translated = await fetchTrans(orig, fromLang, toLang);
-      transEl.className   = 'bubble-trans';
-      transEl.textContent = `(${translated})`;
+      const translated = await fetchTrans(orig, from, to);
+      area.className   = 'bubble-trans';
+      area.textContent = `(${translated})`;
+      wrap.dataset.text = translated;
       btn.remove();
+
+      if (document.getElementById('ttsTrans').checked) {
+        speak(translated, to === 'ko' ? 'ko-KR' : 'en-US');
+      }
     } catch {
       btn.textContent = '재시도';
       btn.disabled    = false;
     }
   }
 
-  /* ── 엑셀 내보내기 ── */
-  function exportHistory() { exportToExcel(); }
+  function replayBubble(id) {
+    const el = document.getElementById(id);
+    if (el) speak(el.dataset.text, el.dataset.lang || 'ko-KR');
+  }
 
+  /* ══════════════════════════════════════
+     번역 API
+  ══════════════════════════════════════ */
+  async function fetchTrans(text, from, to) {
+    const url  = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${encodeURIComponent(text)}`;
+    const res  = await fetch(url);
+    const data = await res.json();
+    return data[0].map(x => x[0]).join('');
+  }
+
+  /* ══════════════════════════════════════
+     엑셀 내보내기
+  ══════════════════════════════════════ */
   function exportToExcel() {
-    const bubbles = document.querySelectorAll('.bubble-wrap');
-    if (!bubbles.length) { alert('저장할 기록이 없어요.'); return; }
-
-    const rows = [['시간', '화자', '원문', '번역']];
-
-    // 세션 마커도 포함
     const items = document.querySelectorAll('.session-mark, .bubble-wrap');
+    if (!items.length) { alert('저장할 기록이 없어요.'); return; }
+
+    const rows = [['시간', '화자', '발화 내용', '번역']];
     items.forEach(el => {
       if (el.classList.contains('session-mark')) {
         rows.push([el.textContent.trim(), '', '', '']);
       } else {
-        const meta  = el.querySelector('.bubble-meta');
-        const orig  = el.querySelector('.bubble-orig');
-        const trans = el.querySelector('.bubble-trans');
-        if (!orig) return;
-
-        // 시간 + 화자 분리
-        const metaText = meta ? meta.textContent.trim().replace(/\s+/g, ' ') : '';
-        const timeMatch = metaText.match(/\d{1,2}:\d{2}/);
-        const time = timeMatch ? timeMatch[0] : '';
-        // 화자: strong 태그 텍스트
-        const nameEl = meta ? meta.querySelector('strong') : null;
-        const name   = nameEl ? nameEl.textContent.trim() : '';
-
+        const meta   = el.querySelector('.bubble-meta');
+        const orig   = el.querySelector('.bubble-orig');
+        const trans  = el.querySelector('.bubble-trans');
+        const nameEl = meta?.querySelector('strong');
+        const tm     = meta?.textContent.match(/\d{1,2}:\d{2}/);
         rows.push([
-          time,
-          name,
-          orig.textContent.trim(),
-          trans ? trans.textContent.replace(/^\(|\)$/g, '').trim() : ''
+          tm ? tm[0] : '',
+          nameEl ? nameEl.textContent.trim() : '',
+          orig ? orig.textContent.trim() : '',
+          trans ? trans.textContent.replace(/^\(|\)$/g,'').trim() : '',
         ]);
       }
     });
 
-    const ws = XLSX.utils.aoa_to_sheet(rows);
-
-    // 열 너비 설정
-    ws['!cols'] = [
-      { wch: 8 },   // 시간
-      { wch: 14 },  // 화자
-      { wch: 45 },  // 원문
-      { wch: 45 },  // 번역
-    ];
-
-    const wb   = XLSX.utils.book_new();
+    const ws  = XLSX.utils.aoa_to_sheet(rows);
+    ws['!cols'] = [{ wch:8 },{ wch:10 },{ wch:50 },{ wch:50 }];
+    const wb  = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, '대화 기록');
-
-    const date = new Date().toLocaleDateString('ko-KR').replace(/\.\s*/g, '-').replace(/-$/, '');
+    const date = new Date().toLocaleDateString('ko-KR').replace(/\.\s*/g,'-').replace(/-$/,'');
     XLSX.writeFile(wb, `통역기_${date}.xlsx`);
   }
 
   function clearHistory() {
     document.getElementById('historyList').innerHTML =
       '<div class="empty-state" id="emptyState"><span class="icon">💬</span><p>대화 기록 시작을 눌러 시작하세요</p></div>';
-    bubbleCount = 0;
-    sessionCount = 0;
+    bubbleCount = 0; sessionCount = 0;
+    speakerProfiles = []; updateSpeakerLegend();
   }
 
-  /* ── 말하기 패널 ── */
-  let speakItemCount = 0;
-
+  /* ══════════════════════════════════════
+     말하기 패널
+  ══════════════════════════════════════ */
   function handleSpeakKey(e) {
-    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-      e.preventDefault();
-      translateTyped();
-    }
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); translateTyped(); }
   }
 
   async function translateTyped() {
     const input = document.getElementById('speakInput').value.trim();
     if (!input) return;
-
-    const from = document.getElementById('speakFrom').value;
-    const to   = document.getElementById('speakTo').value;
+    const from   = document.getElementById('speakFrom').value;
+    const to     = document.getElementById('speakTo').value;
     const toLang = { ko:'ko-KR', en:'en-US', ja:'ja-JP', zh:'zh-CN' }[to] || 'en-US';
 
-    // 입력창 비우기
     document.getElementById('speakInput').value = '';
-
-    // 로딩 아이템 추가
     const id = 'si' + (++speakItemCount);
-    addSpeakItem(id, input, '번역 중...', null, to);
+    addSpeakItem(id, input, '번역 중...');
 
     try {
       const translated = await fetchTrans(input, from, to);
-      // 말하기 패널 결과 교체
-      const transEl = document.getElementById(id + '-trans');
-      const actEl   = document.getElementById(id + '-actions');
-      if (transEl) transEl.textContent = translated;
-      if (actEl)   actEl.innerHTML = speakItemActions(id, translated, toLang);
-
-      // 대화 기록에도 추가 (P1 = 나)
-      const p1n = document.getElementById('p1Name').value || '사람 1';
-      addBubble(input, translated, 1, p1n + ' ✏️', 'p1', from, to);
+      const te = document.getElementById(id + '-trans');
+      const ae = document.getElementById(id + '-actions');
+      if (te) te.textContent = translated;
+      if (ae) ae.innerHTML = `
+        <button class="speak-item-btn play" onclick="speak('${esc(translated)}','${toLang}')">🔊</button>
+        <button class="speak-item-btn" onclick="copyText('${esc(translated)}',this)">복사</button>
+      `;
+      // 대화 기록에도 추가
+      if (isRecording) {
+        const p1 = speakerProfiles[0] || findOrCreateSpeaker(null);
+        addBubble(input + ' → ' + translated, p1);
+      }
     } catch {
-      const transEl = document.getElementById(id + '-trans');
-      if (transEl) { transEl.textContent = '번역 실패'; transEl.style.color = '#e74c3c'; }
+      const te = document.getElementById(id + '-trans');
+      if (te) { te.textContent = '번역 실패'; te.style.color = '#e74c3c'; }
     }
   }
 
-  function addSpeakItem(id, orig, transText, ttsText, toLangCode) {
+  function addSpeakItem(id, orig, transText) {
     const hist  = document.getElementById('speakHistory');
     const empty = document.getElementById('speakEmpty');
     if (empty) empty.remove();
-
-    const t    = new Date().toLocaleTimeString('ko-KR', { hour:'2-digit', minute:'2-digit' });
+    const t = new Date().toLocaleTimeString('ko-KR', { hour:'2-digit', minute:'2-digit' });
     const item = document.createElement('div');
     item.className = 'speak-item';
     item.innerHTML = `
@@ -984,35 +885,12 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
       <div class="speak-item-footer">
         <span class="speak-item-time">${t}</span>
         <div class="speak-item-actions" id="${id}-actions">
-          <span style="font-size:11px;color:#333">...</span>
+          <span style="color:#333;font-size:11px">...</span>
         </div>
       </div>
     `;
     hist.appendChild(item);
     hist.scrollTop = hist.scrollHeight;
-  }
-
-  function speakItemActions(id, text, lang) {
-    return `
-      <button class="speak-item-btn play" onclick="speakItemText('${id}')">🔊</button>
-      <button class="speak-item-btn" onclick="copyItemText('${id}')">복사</button>
-    `;
-  }
-
-  function speakItemText(id) {
-    const el = document.getElementById(id + '-trans');
-    if (!el) return;
-    const toLang = { ko:'ko-KR', en:'en-US', ja:'ja-JP', zh:'zh-CN' }[document.getElementById('speakTo').value] || 'en-US';
-    speak(el.textContent, toLang);
-  }
-
-  function copyItemText(id) {
-    const el = document.getElementById(id + '-trans');
-    if (!el) return;
-    navigator.clipboard.writeText(el.textContent).then(() => {
-      const btn = document.querySelector(`#${id}-actions .speak-item-btn:last-child`);
-      if (btn) { btn.textContent = '✓'; setTimeout(() => btn.textContent = '복사', 1500); }
-    });
   }
 
   function clearSpeakHistory() {
@@ -1021,68 +899,64 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
     speakItemCount = 0;
   }
 
-  /* ── TTS ── */
+  function copyText(text, btn) {
+    navigator.clipboard.writeText(text).then(() => {
+      const orig = btn.textContent;
+      btn.textContent = '✓';
+      setTimeout(() => btn.textContent = orig, 1500);
+    });
+  }
+
+  /* ══════════════════════════════════════
+     TTS
+  ══════════════════════════════════════ */
   function speak(text, lang) {
     speechSynthesis.cancel();
     const u   = new SpeechSynthesisUtterance(text);
     const idx = document.getElementById('voiceSelect').value;
     if (voices[idx]) u.voice = voices[idx];
-    else {
-      const m = voices.find(v => v.lang.startsWith(lang.split('-')[0]));
-      if (m) u.voice = m;
-    }
-    u.lang  = lang;
+    else { const m = voices.find(v => v.lang.startsWith((lang||'ko').split('-')[0])); if (m) u.voice = m; }
+    u.lang  = lang || 'ko-KR';
     u.rate  = parseFloat(document.getElementById('rateSlider').value);
     u.pitch = parseFloat(document.getElementById('pitchSlider').value);
-    u.onstart = () => {
-      const mic = document.getElementById('micBtn');
-      mic.classList.remove('listening');
-      mic.classList.add('speaking');
-      mic.textContent = '🔊';
-    };
-    u.onend = () => {
-      const mic = document.getElementById('micBtn');
-      mic.classList.remove('speaking');
-      mic.textContent = '🎙️';
-    };
+    u.onstart = () => { const m = document.getElementById('micBtn'); m.classList.add('speaking'); m.textContent='🔊'; };
+    u.onend   = () => { const m = document.getElementById('micBtn'); m.classList.remove('speaking'); m.textContent='🎙️'; };
     speechSynthesis.speak(u);
   }
 
-  /* ── Helpers ── */
-  function setBadge(msg, lang) {
+  /* ══════════════════════════════════════
+     유틸
+  ══════════════════════════════════════ */
+  function setBadge(msg, active) {
     const el = document.getElementById('langBadge');
     el.textContent = msg;
-    el.className   = 'lang-badge' + (lang ? ' ' + lang : '');
+    el.className   = 'lang-badge' + (active ? ' active' : '');
   }
 
   function esc(s) {
     if (!s) return '';
-    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  /* ── 드래그 → 말하기 ── */
+  /* 드래그 → 말하기 */
   let selText = '';
   document.addEventListener('mouseup', e => {
     const btn  = document.getElementById('floatSpeakBtn');
     const text = (window.getSelection()?.toString() || '').trim();
-    if (text && text !== '—') {
+    if (text) {
       selText = text;
       btn.style.display = 'block';
-      btn.style.left = (e.pageX - 40) + 'px';
-      btn.style.top  = (e.pageY - 42) + 'px';
-    } else {
-      btn.style.display = 'none';
-    }
+      btn.style.left    = (e.pageX - 40) + 'px';
+      btn.style.top     = (e.pageY - 42) + 'px';
+    } else { btn.style.display = 'none'; }
   });
   document.addEventListener('mousedown', e => {
     if (e.target.id !== 'floatSpeakBtn') document.getElementById('floatSpeakBtn').style.display = 'none';
   });
-
   function speakSelected() {
     if (!selText) return;
     const isKo = /[\uAC00-\uD7AF]/.test(selText);
-    const to   = isKo ? 'ko-KR' : 'en-US';
-    speak(selText, to);
+    speak(selText, isKo ? 'ko-KR' : 'en-US');
     document.getElementById('floatSpeakBtn').style.display = 'none';
     window.getSelection()?.removeAllRanges();
   }
