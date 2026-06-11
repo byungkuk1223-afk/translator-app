@@ -165,6 +165,8 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
   display: flex; flex-direction: column; gap: 3px;
   max-width: 78%; animation: fadeUp 0.25s ease;
 }
+.bubble-wrap.live .bubble-orig { color: #888; font-style: italic; }
+.bubble-wrap.live .bubble { opacity: 0.65; }
 .bubble-wrap.side-right { align-self: flex-end; align-items: flex-end; }
 .bubble-wrap.side-left  { align-self: flex-start; align-items: flex-start; }
 @keyframes fadeUp { from{opacity:0;transform:translateY(7px)} to{opacity:1;transform:translateY(0)} }
@@ -649,7 +651,7 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     recognition = new SR();
     recognition.lang            = 'ko-KR';
-    recognition.interimResults  = false;
+    recognition.interimResults  = true;
     recognition.maxAlternatives = 1;
     recognition.continuous      = true;
 
@@ -663,9 +665,15 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
 
     recognition.onresult = async (e) => {
       for (let i = e.resultIndex; i < e.results.length; i++) {
-        if (!e.results[i].isFinal) continue;
         const transcript = e.results[i][0].transcript.trim();
-        if (transcript) await handleTranscript(transcript);
+        if (!transcript) continue;
+        if (e.results[i].isFinal) {
+          finalizeLiveBubble(transcript);
+        } else {
+          const pitch   = getRecentPitch();
+          const speaker = findOrCreateSpeaker(pitch);
+          showLiveBubble(transcript, speaker);
+        }
       }
     };
 
@@ -696,19 +704,90 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
     document.getElementById('micBtn').textContent = '🎙️';
   }
 
-  async function handleTranscript(transcript) {
-    const pitch   = getRecentPitch();
-    const speaker = findOrCreateSpeaker(pitch);
+  let liveBubbleId   = null;
+  let liveSpeaker    = null;
 
-    document.getElementById('curOrig').textContent = transcript;
+  function showLiveBubble(text, speaker) {
+    if (liveBubbleId) {
+      // 같은 버블 업데이트
+      const el = document.getElementById(liveBubbleId + '-orig');
+      if (el) {
+        el.textContent = text;
+        const list = document.getElementById('historyList');
+        list.scrollTop = list.scrollHeight;
+        return;
+      }
+    }
+    // 새 라이브 버블 생성
+    liveSpeaker = speaker;
+    const list = document.getElementById('historyList');
+    const t    = new Date().toLocaleTimeString('ko-KR', { hour:'2-digit', minute:'2-digit' });
+    const id   = 'b' + (++bubbleCount);
+    liveBubbleId = id;
+
+    const bgColor   = speaker.color + '22';
+    const bordColor = speaker.color + '44';
+
+    const wrap = document.createElement('div');
+    wrap.id        = id;
+    wrap.className = `bubble-wrap side-${speaker.side} live`;
+    wrap.dataset.orig = text;
+    wrap.innerHTML = `
+      <div class="bubble-meta">
+        <span class="speaker-dot" style="background:${speaker.color};width:8px;height:8px;border-radius:50%;display:inline-block"></span>
+        <strong style="color:${speaker.color}">${esc(speaker.name)}</strong>
+        <span>${t}</span>
+      </div>
+      <div class="bubble" style="background:${bgColor};border:1px solid ${bordColor}">
+        <div class="bubble-orig" id="${id}-orig">${esc(text)}</div>
+        <div class="bubble-trans-area" id="${id}-trans"></div>
+      </div>
+    `;
+    list.appendChild(wrap);
+    list.scrollTop = list.scrollHeight;
+
     const si = document.getElementById('speakerNow');
     si.textContent = `🗣 ${speaker.name}`;
     si.style.color  = speaker.color;
     si.style.borderColor = speaker.color + '55';
     si.style.background  = speaker.color + '11';
-
     setBadge(`🗣 ${speaker.name}`, true);
-    addBubble(transcript, speaker);
+  }
+
+  function finalizeLiveBubble(finalText) {
+    if (liveBubbleId) {
+      const wrap = document.getElementById(liveBubbleId);
+      const origEl = document.getElementById(liveBubbleId + '-orig');
+      if (wrap && origEl) {
+        origEl.textContent = finalText;
+        wrap.dataset.orig  = finalText;
+        wrap.dataset.text  = finalText;
+        wrap.classList.remove('live');
+        // 번역/듣기 버튼 추가
+        const bubble = wrap.querySelector('.bubble');
+        const btns   = document.createElement('div');
+        btns.className = 'bubble-btns';
+        btns.innerHTML = `
+          <button class="trans-btn-sm" onclick="translateBubble('${liveBubbleId}')">🌐 번역</button>
+          <button class="replay-btn" onclick="replayBubble('${liveBubbleId}')">▶ 듣기</button>
+        `;
+        bubble.appendChild(btns);
+        document.getElementById('historyList').scrollTop = 99999;
+        document.getElementById('curOrig').textContent = finalText;
+      }
+    } else {
+      // live 버블 없이 final만 온 경우 (짧은 발화)
+      const pitch   = getRecentPitch();
+      const speaker = findOrCreateSpeaker(pitch);
+      addBubble(finalText, speaker);
+      document.getElementById('curOrig').textContent = finalText;
+    }
+    liveBubbleId = null;
+    liveSpeaker  = null;
+  }
+
+  async function handleTranscript(transcript) {
+    // 더 이상 직접 호출 안 함 (finalizeLiveBubble로 대체)
   }
 
   /* ══════════════════════════════════════
