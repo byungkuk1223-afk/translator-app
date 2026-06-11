@@ -652,16 +652,22 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
 
   /* ── 화자 감지 ── */
   function detectSpeaker(text) {
-    const isKo = /[\uAC00-\uD7AF\u3131-\u314E]/.test(text);
-    const isJa = /[\u3040-\u30FF]/.test(text);
-    const isZh = /[\u4E00-\u9FFF]/.test(text) && !isJa;
-    let lang = 'en';
-    if (isKo) lang = 'ko';
-    else if (isJa) lang = 'ja';
-    else if (isZh) lang = 'zh';
+    const koChars = (text.match(/[\uAC00-\uD7AF\u3131-\u314E]/g) || []).length;
+    const isJa    = /[\u3040-\u30FF]/.test(text);
+    const isZh    = /[\u4E00-\u9FFF]/.test(text) && !isJa;
 
-    const p1l = document.getElementById('p1Lang').value;
-    const p2l = document.getElementById('p2Lang').value;
+    let lang = 'en';
+    if (koChars > 0) lang = 'ko';           // 한국어 한 글자라도 있으면 ko
+    else if (isJa)   lang = 'ja';
+    else if (isZh)   lang = 'zh';
+    // 영어로 판정하려면 순수 영어 단어 2개 이상 있어야 함
+    else {
+      const engWords = text.trim().split(/\s+/).filter(w => /^[a-zA-Z]{2,}$/.test(w));
+      if (engWords.length < 2) lang = 'ko'; // 애매하면 P1 기본값
+    }
+
+    const p1l   = document.getElementById('p1Lang').value;
+    const p2l   = document.getElementById('p2Lang').value;
     const person = (p1l === lang) ? 1 : (p2l === lang) ? 2 : 1;
     return { person, lang };
   }
