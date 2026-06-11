@@ -217,11 +217,21 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
   border-top: 1px solid rgba(255,255,255,0.05);
 }
 .side-p2 .bubble-trans { color: #3a6a4a; }
+.bubble-btns { display: flex; gap: 8px; align-items: center; padding-top: 4px; }
+
 .replay-btn {
   background: none; border: none; color: #333; font-size: 10px;
-  cursor: pointer; padding: 4px 0 0; text-align: inherit; transition: color 0.2s;
+  cursor: pointer; padding: 0; transition: color 0.2s;
 }
 .replay-btn:hover { color: #4f6ef7; }
+
+.trans-inline-btn {
+  background: none; border: 1px solid #2a3a4a; color: #4f9ef7;
+  border-radius: 4px; font-size: 10px; padding: 2px 7px;
+  cursor: pointer; transition: all 0.2s;
+}
+.trans-inline-btn:hover { background: #0d1828; }
+.trans-inline-btn:disabled { opacity: 0.5; cursor: default; }
 
 .empty-state {
   flex: 1; display: flex; flex-direction: column;
@@ -675,7 +685,7 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
     recognition.lang = 'ko-KR';
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
-    recognition.continuous = false;
+    recognition.continuous = true;
 
     recognition.onstart = () => {
       isListening = true;
@@ -687,7 +697,14 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
     };
 
     recognition.onresult = async (e) => {
-      const transcript = e.results[0][0].transcript.trim();
+      // continuous 모드: 새로 확정된 결과만 처리
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        if (!e.results[i].isFinal) continue;
+        await handleTranscript(e.results[i][0].transcript.trim());
+      }
+    };
+
+    async function handleTranscript(transcript) {
       if (!transcript) return;
 
       const { person, lang } = detectSpeaker(transcript);
@@ -732,7 +749,7 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
         const tl = { ko:'ko-KR', en:'en-US', ja:'ja-JP', zh:'zh-CN' }[toTarget] || 'en-US';
         speak(translated, tl);
       }
-    };
+    }
 
     recognition.onerror = (e) => {
       if (e.error !== 'no-speech') setBadge('오류: ' + e.error, '');
@@ -783,11 +800,18 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
 
     const transHtml = translated
       ? `<div class="bubble-trans">(${esc(translated)})</div>`
-      : '';
+      : `<div class="bubble-trans-placeholder" id="${id}-trans"></div>`;
+
+    // 번역 버튼: 이미 번역됐으면 숨김
+    const transBtn = translated
+      ? ''
+      : `<button class="trans-inline-btn" onclick="translateBubble('${id}','${esc(orig)}','${origLang}')">🌐 번역</button>`;
 
     const wrap = document.createElement('div');
     wrap.id        = id;
     wrap.className = `bubble-wrap side-${cls}`;
+    wrap.dataset.orig = orig;
+    wrap.dataset.origlang = origLang;
     wrap.dataset.text = translated || orig;
     wrap.dataset.lang = ttsLang;
     wrap.innerHTML = `
@@ -798,7 +822,10 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
       <div class="bubble">
         <div class="bubble-orig">${esc(orig)}</div>
         ${transHtml}
-        <button class="replay-btn" onclick="replayBubble('${id}')">▶ 다시 듣기</button>
+        <div class="bubble-btns">
+          ${transBtn}
+          <button class="replay-btn" onclick="replayBubble('${id}')">▶ 듣기</button>
+        </div>
       </div>
     `;
     list.appendChild(wrap);
@@ -808,6 +835,29 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
   function replayBubble(id) {
     const el = document.getElementById(id);
     if (el) speak(el.dataset.text, el.dataset.lang);
+  }
+
+  async function translateBubble(id, orig, fromLang) {
+    const btn     = document.querySelector(`#${id} .trans-inline-btn`);
+    const transEl = document.getElementById(`${id}-trans`);
+    if (!btn || !transEl) return;
+
+    btn.textContent = '...';
+    btn.disabled    = true;
+
+    // 번역 방향: 설정에 따르거나 기본 반대 언어
+    const toMap = { ko:'en', en:'ko', ja:'ko', zh:'ko' };
+    const toLang = toMap[fromLang] || 'en';
+
+    try {
+      const translated = await fetchTrans(orig, fromLang, toLang);
+      transEl.className   = 'bubble-trans';
+      transEl.textContent = `(${translated})`;
+      btn.remove();
+    } catch {
+      btn.textContent = '재시도';
+      btn.disabled    = false;
+    }
   }
 
   /* ── 엑셀 내보내기 ── */
