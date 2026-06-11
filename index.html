@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>통역기</title>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -598,6 +599,8 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
       document.getElementById('alwaysLabel').textContent = 'OFF';
       shouldRestart = false;
       stopListening();
+      // 기록 종료 시 자동 엑셀 저장
+      setTimeout(() => exportToExcel(), 400);
     }
   }
 
@@ -809,27 +812,58 @@ input[type=range] { flex: 1; accent-color: #4f6ef7; cursor: pointer; }
     if (el) speak(el.dataset.text, el.dataset.lang);
   }
 
-  /* ── 내보내기 ── */
-  function exportHistory() {
+  /* ── 엑셀 내보내기 ── */
+  function exportHistory() { exportToExcel(); }
+
+  function exportToExcel() {
     const bubbles = document.querySelectorAll('.bubble-wrap');
-    if (!bubbles.length) { alert('기록이 없어요.'); return; }
-    let out = `통역기 대화 기록\n생성: ${new Date().toLocaleString('ko-KR')}\n${'─'.repeat(40)}\n\n`;
-    bubbles.forEach(b => {
-      const meta  = b.querySelector('.bubble-meta');
-      const orig  = b.querySelector('.bubble-orig');
-      const trans = b.querySelector('.bubble-trans');
-      if (orig) {
-        if (meta) out += `[${meta.textContent.trim().replace(/\s+/g,' ')}]\n`;
-        out += orig.textContent.trim() + '\n';
-        if (trans) out += trans.textContent.trim() + '\n';
-        out += '\n';
+    if (!bubbles.length) { alert('저장할 기록이 없어요.'); return; }
+
+    const rows = [['시간', '화자', '원문', '번역']];
+
+    // 세션 마커도 포함
+    const items = document.querySelectorAll('.session-mark, .bubble-wrap');
+    items.forEach(el => {
+      if (el.classList.contains('session-mark')) {
+        rows.push([el.textContent.trim(), '', '', '']);
+      } else {
+        const meta  = el.querySelector('.bubble-meta');
+        const orig  = el.querySelector('.bubble-orig');
+        const trans = el.querySelector('.bubble-trans');
+        if (!orig) return;
+
+        // 시간 + 화자 분리
+        const metaText = meta ? meta.textContent.trim().replace(/\s+/g, ' ') : '';
+        const timeMatch = metaText.match(/\d{1,2}:\d{2}/);
+        const time = timeMatch ? timeMatch[0] : '';
+        // 화자: strong 태그 텍스트
+        const nameEl = meta ? meta.querySelector('strong') : null;
+        const name   = nameEl ? nameEl.textContent.trim() : '';
+
+        rows.push([
+          time,
+          name,
+          orig.textContent.trim(),
+          trans ? trans.textContent.replace(/^\(|\)$/g, '').trim() : ''
+        ]);
       }
     });
-    const a = document.createElement('a');
-    a.href     = URL.createObjectURL(new Blob([out], { type:'text/plain;charset=utf-8' }));
-    a.download = `통역기_${new Date().toLocaleDateString('ko-KR').replace(/\.\s*/g,'-').replace(/-$/,'')}.txt`;
-    a.click();
-    URL.revokeObjectURL(a.href);
+
+    const ws = XLSX.utils.aoa_to_sheet(rows);
+
+    // 열 너비 설정
+    ws['!cols'] = [
+      { wch: 8 },   // 시간
+      { wch: 14 },  // 화자
+      { wch: 45 },  // 원문
+      { wch: 45 },  // 번역
+    ];
+
+    const wb   = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, '대화 기록');
+
+    const date = new Date().toLocaleDateString('ko-KR').replace(/\.\s*/g, '-').replace(/-$/, '');
+    XLSX.writeFile(wb, `통역기_${date}.xlsx`);
   }
 
   function clearHistory() {
